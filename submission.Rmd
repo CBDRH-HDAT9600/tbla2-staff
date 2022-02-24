@@ -1,0 +1,39 @@
+---
+title: "HDAT9600 Team Based Learning Activity"
+subtitle: "TBLA 2. Linear model"
+author: "A. Student"
+date: "01/01/1990"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Instructions
+
+Using the `prostate` dataset (which comes with the `faraway` package for R) write some R code that
+
+1) Performs a simple exploratory data analysis (EDA)
+1) Fits a linear model, with the `lpsa` variable as the outcome (response), and the `lcavol` variable as the single predictor
+1) Displays the R-squared and the residual standard error (RSE) for this model
+1) Adds each of the variables `lweight`, `svi`, `lbph`, `age`, `lcp`, `pgg45` and `gleason` to the model, one-by-one
+1) Displays the R-squared and RSE for each of these models
+1) Creates two plots, one displaying the trend in R-squared as predictor variables are successively added to each model, and another plot showing the trend in RSE as predictor variables are successively added to each model
+1) Finally, briefly describe what you observe in these plots
+
+
+## Accessing the data
+
+We can use the `data()` function from the `utils` package to load the data into the R environment, and the `head()` function to take a sneak peek.
+
+```{r}
+data(prostate, package = "faraway")
+head(prostate)
+```
+
+Try entering `?faraway::prostate` at the console to get more information about this dataset. 
+
+## Submission
+
+Work with your group to add your analysis to this file using appropriate Rmarkdown formatting and R code chunks. Add and commit your changes as you go. Once you are ready, push all your changes to submit. If necessary, check out the introductory tutorials on knitr and git. 
