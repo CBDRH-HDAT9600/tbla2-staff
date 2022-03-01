@@ -1,39 +1,172 @@
 ---
 title: "HDAT9600 Team Based Learning Activity"
 subtitle: "TBLA 2. Linear model"
-author: "A. Student"
-date: "01/01/1990"
-output: html_document
+author: "Mark Hanly"
+date: "01 Mar 2022"
+output: github_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
-
-## Instructions
-
-Using the `prostate` dataset (which comes with the `faraway` package for R) write some R code that
-
-1) Performs a simple exploratory data analysis (EDA)
-1) Fits a linear model, with the `lpsa` variable as the outcome (response), and the `lcavol` variable as the single predictor
-1) Displays the R-squared and the residual standard error (RSE) for this model
-1) Adds each of the variables `lweight`, `svi`, `lbph`, `age`, `lcp`, `pgg45` and `gleason` to the model, one-by-one
-1) Displays the R-squared and RSE for each of these models
-1) Creates two plots, one displaying the trend in R-squared as predictor variables are successively added to each model, and another plot showing the trend in RSE as predictor variables are successively added to each model
-1) Finally, briefly describe what you observe in these plots
-
-
-## Accessing the data
-
-We can use the `data()` function from the `utils` package to load the data into the R environment, and the `head()` function to take a sneak peek.
-
-```{r}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
+library(ggplot2)
+library(emo)
 data(prostate, package = "faraway")
-head(prostate)
+# More on the data https://link.springer.com/chapter/10.1007/978-1-4612-5098-2_47
 ```
 
-Try entering `?faraway::prostate` at the console to get more information about this dataset. 
+### Housekeeping
 
-## Submission
+`r emo::ji("video")` Cameras and recording 
+
+`r emo::ji("calendar")` Census date and team formation
+
+`r emo::ji("teacher")` You should see comments from me in your Team's GitHub repo (did you get a notification?)
+
+***
+
+### TBLA Submissions
+
+#### `r emo::ji("rocket")` Lot's of great work---well done!
+
+Let's discuss.
+
+1. Approaches to univariate EDA  
+1. Approaches to binary EDA  
+1. What do we learn from EDA?  
+1. Approaches to model fitting  
+1. What do we learn from the R^^2 and RSE?
+
+
+***
+
+## Sample submission
 
 Work with your group to add your analysis to this file using appropriate Rmarkdown formatting and R code chunks. Add and commit your changes as you go. Once you are ready, push all your changes to submit. If necessary, check out the introductory tutorials on knitr and git. 
+
+
+### 1. Perform a simple exploratory data analysis (EDA)
+
+#### Summary
+```{r}
+summary(prostate)
+```
+
+#### Univariate distributions
+```{r, fig.width=12, fig.height=12}
+h1 <- ggplot(data = prostate, aes(x = lcavol)) + geom_histogram(color = 'blue', fill = 'lightblue') + labs(title = "log(cancer volume)")
+h2 <- ggplot(data = prostate, aes(x = lweight)) + geom_histogram(color = 'blue', fill = 'lightblue') + labs(title = "log(prostate weight)")
+h3 <- ggplot(data = prostate, aes(x = age)) + geom_histogram(color = 'blue', fill = 'lightblue') + labs(title = "log(cancer volume)")
+h4 <- ggplot(data = prostate, aes(x = lcavol)) + geom_histogram(color = 'blue', fill = 'lightblue') + labs(title = "Age")
+h5 <- ggplot(data = prostate, aes(x = lbph)) + geom_histogram(color = 'blue', fill = 'lightblue') + labs(title = "log(benign prostatic hyperplasia amount)")
+h6 <- ggplot(data = prostate, aes(x = svi)) + geom_histogram(color = 'blue', fill = 'lightblue') + labs(title = "Seminal vesicle invasion")
+h7 <- ggplot(data = prostate, aes(x = lcp)) + geom_histogram(color = 'blue', fill = 'lightblue') + labs(title = "log(capsular penetration)")
+h8 <- ggplot(data = prostate, aes(x = gleason)) + geom_histogram(color = 'blue', fill = 'lightblue') + labs(title = "Gleason score")
+h9 <- ggplot(data = prostate, aes(x = lpsa)) + geom_histogram(color = 'blue', fill = 'lightblue') + labs(title = "log(prostate specific antigen)")
+
+ggpubr::ggarrange(h1, h2, h3, h4, h5, h6, h7, h8, h9)
+```
+
+#### Bivariate distributions with the outcome variable (log of Prostate Specific Antigen)
+
+```{r, fig.width=12, fig.height=12}
+s1 <- ggplot(data = prostate, aes(x = lcavol, y = lpsa)) + geom_point(color = 'lightblue') + geom_smooth(method = 'lm', formula = y~x, color = 'blue') + labs(title = "log(cancer volume)")
+s2 <- ggplot(data = prostate, aes(x = lweight, y = lpsa)) + geom_point(color = 'lightblue') + geom_smooth(method = 'lm', formula = y~x, color = 'blue') + labs(title = "log(prostate weight)")
+s3 <- ggplot(data = prostate, aes(x = age, y = lpsa)) + geom_point(color = 'lightblue') + geom_smooth(method = 'lm', formula = y~x, color = 'blue') + labs(title = "log(cancer volume)")
+s4 <- ggplot(data = prostate, aes(x = lcavol, y = lpsa)) + geom_point(color = 'lightblue') + geom_smooth(method = 'lm', formula = y~x, color = 'blue') + labs(title = "Age")
+s5 <- ggplot(data = prostate, aes(x = lbph, y = lpsa)) + geom_point(color = 'lightblue') + geom_smooth(method = 'lm', formula = y~x, color = 'blue') + labs(title = "log(benign prostatic hyperplasia amount)")
+s6 <- ggplot(data = prostate, aes(x = svi, y = lpsa)) + geom_point(color = 'lightblue') + geom_smooth(method = 'lm', formula = y~x, color = 'blue') + labs(title = "Seminal vesicle invasion")
+s7 <- ggplot(data = prostate, aes(x = lcp, y = lpsa)) + geom_point(color = 'lightblue') + geom_smooth(method = 'lm', formula = y~x, color = 'blue') + labs(title = "log(capsular penetration)")
+s8 <- ggplot(data = prostate, aes(x = gleason, y = lpsa)) + geom_point(color = 'lightblue') + geom_smooth(method = 'lm', formula = y~x, color = 'blue') + labs(title = "Gleason score")
+s9 <- ggplot(data = prostate, aes(x = lpsa, y = lpsa)) + geom_point(color = 'lightblue') + geom_smooth(method = 'lm', formula = y~x, color = 'blue') + labs(title = "log(prostate specific antigen)")
+
+ggpubr::ggarrange(s1, s2, s3, s4, s5, s6, s7, s8, s9)
+```
+
+### 2. Fit a linear model, with the `lpsa` variable as the outcome (response), and the `lcavol` variable as the single predictor
+
+```{r}
+
+lm1 <- lm(lpsa ~ lcavol, data = prostate)
+summary(lm1)
+```
+
+The parameter estimate for `lcavol` suggests that for each one-unit increase in the log of cancer volume corresponds to a 0.72 increase in the log of PSA. On the original scale, we can say that if cancer volume increases by 1% we would expect the PSA outcome to increase by 0.72%. 
+
+See [here](https://sites.google.com/site/curtiskephart/ta/econ113/interpreting-beta) for notes on how to interpret regression coefficients that involve logs of the outcome and/or predictors.
+
+
+### Display the R-squared and the residual standard error (RSE) for this model 
+
+We can access these values by looking at the summary of the of the model. 
+```{r echo=TRUE}
+sumlm1 <- summary(lm1)
+names(sumlm1)
+sumlm1$r.squared
+sumlm1$sigma
+```
+
+The model R-squared is `r round(sumlm1$r.squared, digits = 2)` and the RSE is `r round(sumlm1$sigma, digits = 2)`.
+
+
+### 4. Add each of the variables `lweight`, `svi`, `lbph`, `age`, `lcp`, `pgg45` and `gleason` to the model, one-by-one
+
+I've done this in a very manual way (anyone have more automated approaches?):
+
+```{r echo = TRUE}
+lm2 <- lm(lpsa ~ lcavol + lweight, data = prostate)
+lm3 <- lm(lpsa ~ lcavol + lweight + svi, data = prostate)
+lm4 <- lm(lpsa ~ lcavol + lweight + svi + lbph, data = prostate)
+lm5 <- lm(lpsa ~ lcavol + lweight + svi + lbph + age, data = prostate)
+lm6 <- lm(lpsa ~ lcavol + lweight + svi + lbph + age + lcp, data = prostate)
+lm7 <- lm(lpsa ~ lcavol + lweight + svi + lbph + age + lcp + pgg45, data = prostate)
+lm8 <- lm(lpsa ~ lcavol + lweight + svi + lbph + age + lcp + pgg45 + gleason, data = prostate)
+```
+
+### 5. Display the R-squared and RSE for each of these models
+
+I'll use a bit of curmudgeonly code to save these values to a dataframe:
+
+```{r, echo=TRUE}
+# The functions f1() and f2() grab the R-Squared and RSE from a model object
+f1 <- function(x){summary(x)$r.squared}
+f2 <- function(x){summary(x)$sigma}
+
+mods <- list(lm1, lm2, lm3, lm4, lm5, lm6, lm7, lm8)
+
+results <- data.frame(
+  var = c('lcavol', 'lweight', 'svi', 'lbph', 'age', 'lcp', 'pgg45', 'gleason'),
+  r2 = unlist(lapply(mods, f1)),
+  rse = unlist(lapply(mods, f2))
+) 
+
+head(results)
+```
+
+
+### 6. Display the trend in R-squared and RSE as predictor variables are successively added
+
+Now that everything is in a data frame this is easy to do with `ggplot2`.
+
+```{r, fig.width=12, fig.height=6}
+
+r1 <- ggplot(data = results, aes(x = r2, y = factor(var, levels = var))) + 
+  geom_point() +
+  scale_y_discrete("Additional variable") +
+  scale_x_continuous("R-Squared", limits = c(0.5, 0.7)) +
+  labs(title = "R-Squared")
+
+r2 <- ggplot(data = results, aes(x = rse, y = factor(var, levels = var))) + 
+  geom_point() +
+  scale_y_discrete("Additional variable") +
+  scale_x_continuous("Residual standard error", limits = c(0.6, 0.8)) +
+  labs(title = "Residual Standard Error")
+
+
+ggpubr::ggarrange(r1, r2)
+
+```
+
+
+### 7. Describe what you observe in these plots
+_**Discuss as a group**_
+
