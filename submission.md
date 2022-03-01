@@ -9,7 +9,7 @@ Mark Hanly
 
 📆 Census date and team formation
 
-👩‍🏫 You should see comments from me in your Team’s GitHub repo (did you
+👨‍🏫 You should see comments from me in your Team’s GitHub repo (did you
 get a notification?)
 
 -----
@@ -24,7 +24,7 @@ Let’s discuss.
 2.  Approaches to binary EDA  
 3.  What do we learn from EDA?  
 4.  Approaches to model fitting  
-5.  What do we learn from the R^^2 and RSE?
+5.  What do we learn from the R-Squared and RSE?
 
 -----
 

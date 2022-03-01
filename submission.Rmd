@@ -34,7 +34,7 @@ Let's discuss.
 1. Approaches to binary EDA  
 1. What do we learn from EDA?  
 1. Approaches to model fitting  
-1. What do we learn from the R^^2 and RSE?
+1. What do we learn from the R-Squared and RSE?
 
 
 ***
